@@ -97,8 +97,8 @@ jobs:
 
       - name: Restart backend deployment
         run: |
-          kubectl rollout restart deployment backend
+          kubectl rollout restart deployment eks-backend
 
       - name: Restart frontend deployment
         run: |
-          kubectl rollout restart deployment frontend
+          kubectl rollout restart deployment eks-frontend
