@@ -2,23 +2,23 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: eks-front
+  name: eks-frontend
 
 spec:
   replicas: 1
 
   selector:
     matchLabels:
-      app: eks-front
+      app: eks-frontend
 
   template:
     metadata:
       labels:
-        app: eks-front
+        app: eks-frontend
 
     spec:
       containers:
-        - name: eks-front
+        - name: eks-frontend
           image: 144999876473.dkr.ecr.us-east-1.amazonaws.com/eks-frontend:latest
 
           ports:
