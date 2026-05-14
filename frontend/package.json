@@ -1,0 +1,14 @@
+{
+  "name": "eks-test-frontend",
+  "version": "1.0.0",
+  "description": "Minimal Vite frontend for EKS testing",
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.4.11"
+  }
+}

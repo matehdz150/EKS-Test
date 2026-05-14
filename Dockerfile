@@ -1,11 +1,24 @@
+FROM node:20-alpine AS frontend-build
+
+WORKDIR /app/frontend
+
+COPY frontend/package*.json ./
+RUN npm ci
+
+COPY frontend/ ./
+RUN npm run build
+
 FROM node:20-alpine
 
-WORKDIR /app
+WORKDIR /app/backend
 
-COPY package*.json ./
-RUN npm install --omit=dev
+ENV NODE_ENV=production
 
-COPY . .
+COPY backend/package*.json ./
+RUN npm ci --omit=dev
+
+COPY backend/ ./
+COPY --from=frontend-build /app/frontend/dist ./dist
 
 EXPOSE 3000
 

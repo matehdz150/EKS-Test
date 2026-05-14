@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: eks-demo
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: eks-front
+
+  template:
+    metadata:
+      labels:
+        app: eks-front
+
+    spec:
+      containers:
+        - name: eks-front
+          image: 144999876473.dkr.ecr.us-east-1.amazonaws.com/eks-frontend:latest
+
+          ports:
+            - containerPort: 80

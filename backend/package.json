@@ -1,7 +1,7 @@
 {
-  "name": "eks-test",
+  "name": "eks-test-backend",
   "version": "1.0.0",
-  "description": "Minimal Express API for EKS testing",
+  "description": "Minimal Express backend for EKS testing",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

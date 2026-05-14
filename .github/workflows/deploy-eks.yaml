@@ -8,7 +8,9 @@ on:
 env:
   AWS_REGION: us-east-1
   CLUSTER_NAME: eks-demo
-  ECR_URI: 144999876473.dkr.ecr.us-east-1.amazonaws.com/eks-test
+
+  ECR_BACKEND_URI: 144999876473.dkr.ecr.us-east-1.amazonaws.com/eks-backend
+  ECR_FRONTEND_URI: 144999876473.dkr.ecr.us-east-1.amazonaws.com/eks-frontend
 
 jobs:
   deploy:
@@ -29,17 +31,47 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build Docker image
-        run: |
-          docker build -t eks-demo .
+      # =========================
+      # BACKEND
+      # =========================
 
-      - name: Tag Docker image
+      - name: Build backend image
         run: |
-          docker tag eks-demo:latest $ECR_URI:latest
+          docker build \
+            -t eks-backend \
+            ./backend
 
-      - name: Push Docker image
+      - name: Tag backend image
         run: |
-          docker push $ECR_URI:latest
+          docker tag eks-backend:latest \
+            $ECR_BACKEND_URI:latest
+
+      - name: Push backend image
+        run: |
+          docker push $ECR_BACKEND_URI:latest
+
+      # =========================
+      # FRONTEND
+      # =========================
+
+      - name: Build frontend image
+        run: |
+          docker build \
+            -t eks-frontend \
+            ./frontend
+
+      - name: Tag frontend image
+        run: |
+          docker tag eks-frontend:latest \
+            $ECR_FRONTEND_URI:latest
+
+      - name: Push frontend image
+        run: |
+          docker push $ECR_FRONTEND_URI:latest
+
+      # =========================
+      # CONNECT TO EKS
+      # =========================
 
       - name: Update kubeconfig
         run: |
@@ -47,10 +79,26 @@ jobs:
             --region $AWS_REGION \
             --name $CLUSTER_NAME
 
-      - name: Apply Kubernetes manifests
-        run: |
-          kubectl apply -f k8s/
+      # =========================
+      # APPLY K8S
+      # =========================
 
-      - name: Restart Kubernetes deployment
+      - name: Apply backend manifests
         run: |
-          kubectl rollout restart deployment eks-demo
+          kubectl apply -f k8s/backend/
+
+      - name: Apply frontend manifests
+        run: |
+          kubectl apply -f k8s/frontend/
+
+      # =========================
+      # RESTART DEPLOYMENTS
+      # =========================
+
+      - name: Restart backend deployment
+        run: |
+          kubectl rollout restart deployment backend
+
+      - name: Restart frontend deployment
+        run: |
+          kubectl rollout restart deployment frontend
