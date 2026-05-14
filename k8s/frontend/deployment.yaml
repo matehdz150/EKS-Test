@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: eks-demo
+  name: eks-front
 
 spec:
   replicas: 1
