@@ -11,6 +11,14 @@ app.get("/api/health", (_req, res) => {
   });
 });
 
+app.get("/api/stress", (_req, res) => {
+  const end = Date.now() + 10000;
+
+  while (Date.now() < end) {}
+
+  res.send("stress done");
+});
+
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
